@@ -130,7 +130,11 @@ std::string TOutput::strerror_s(int errno_copy) {
     b_errbuf[size-1] = '\0';
   }
 #else // _WIN32
+#ifdef HAVE_STRERROR_S
   ::strerror_s(b_errbuf, sizeof(b_errbuf), errno_copy);
+#else // HAVE_STRERROR_S
+  return "errno = " + to_string(errno_copy);
+#endif // HAVE_STRERROR_S
 #endif // _WIN32
   char* b_error = b_errbuf;
 #endif // HAVE_STRERROR_R
@@ -138,6 +142,20 @@ std::string TOutput::strerror_s(int errno_copy) {
   // Can anyone prove that explicit cast is probably not necessary
   // to ensure that the string object is constructed before
   // b_error becomes invalid?
+
+  // Sure, this is called 'implicit conversion', reference is here:
+  // Implicit conversions are performed whenever an expression of some type T1 is used in context that does not accept that type, but accepts some other type T2; in particular:
+  //               when the expression is used as the argument when calling a function that is declared with T2 as parameter;
+  //               when the expression is used as an operand with an operator that expects T2;
+  // this one->    when initializing a new object of type T2, including return statement in a function returning T2;
+  //               when the expression is used in a switch statement (T2 is integral type);
+  //               when the expression is used in an if statement or a loop (T2 is bool).
+  //
+  // if constructor of std::string in this case is declared explicit, then the code will be malformed(but this is not the same as the lifetime issue that is raised in the question)
+  // -rolesen (and feel free to delete all this answer anytime)
+
+  
+
   return std::string(b_error);
 }
 }

@@ -55,6 +55,7 @@ check_include_file(strings.h HAVE_STRINGS_H)
 check_function_exists(gethostbyname HAVE_GETHOSTBYNAME)
 check_function_exists(gethostbyname_r HAVE_GETHOSTBYNAME_R)
 check_function_exists(strerror_r HAVE_STRERROR_R)
+check_function_exists(strerror_s HAVE_STRERROR_S)
 check_function_exists(sched_get_priority_max HAVE_SCHED_GET_PRIORITY_MAX)
 check_function_exists(sched_get_priority_min HAVE_SCHED_GET_PRIORITY_MIN)
 
